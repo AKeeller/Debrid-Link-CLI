@@ -15,7 +15,7 @@ public class SmartApiKeyProvider(params IApiKeyProvider[] providers) : IApiKeyPr
 		{
 			Border = BoxBorder.Double,
 			Padding = new Padding(1, 1),
-			Header = new PanelHeader("DebridLink CLI", Justify.Center)
+			Header = new PanelHeader("Debrid-Link CLI", Justify.Center)
 		};
 		AnsiConsole.Write(panel);
 		return null;

@@ -7,7 +7,7 @@ public class ConfigApiKeyProvider : IApiKeyProvider
 	public ConfigApiKeyProvider(string? configPath = null) =>
 		_configPath = configPath ?? Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-			"DebridLink",
+			"Debrid-Link",
 			"config.json"
 		);
 

@@ -1,6 +1,12 @@
-﻿DotNetEnv.Env.Load();
+﻿var apiKey = new SmartApiKeyProvider(
+	new ArgsApiKeyProvider(args),
+	new EnvApiKeyProvider(),
+	new StdinApiKeyProvider(),
+	new ConfigApiKeyProvider()
+).GetApiKey();
 
-var apiKey = Environment.GetEnvironmentVariable("DEBRID_LINK_API_KEY") ?? throw new InvalidOperationException("Missing DEBRID_LINK_API_KEY");
+if (apiKey is null)
+	return 1;
 
 using var client = new DebridLinkClient(apiKey);
 var account = await client.GetAccountAsync();
@@ -12,3 +18,5 @@ Console.WriteLine();
 
 var chosenTorrent = TorrentSelector.SelectFrom(torrents);
 await DownloadService.DownloadAllAsync(chosenTorrent.Files, "downloads");
+
+return 0;

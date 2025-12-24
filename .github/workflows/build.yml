@@ -1,0 +1,89 @@
+name: Build Debrid-Link CLI
+
+on:
+  push:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux-x64, linux-arm64, win-x64, osx-x64, osx-arm64]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v4.2.0
+        with:
+          versionSpec: '6.4.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v4.2.0
+
+      - name: Display version
+        run: |
+          echo "GitVersion SemVer: ${{ steps.gitversion.outputs.SemVer }}"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Publish executable
+        run: |
+          mkdir -p publish
+          echo "Publishing for ${{ matrix.platform }}..."
+          dotnet publish -c Release -r ${{ matrix.platform }} -p:PublishSingleFile=true --self-contained true -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:AssemblyName=dlcli -o .
+
+      - name: Package Linux .deb
+        if: startsWith(matrix.platform, 'linux')
+        run: |
+          APP_NAME=debridlink-cli
+          VERSION=${{ steps.gitversion.outputs.SemVer }}
+
+          case "${{ matrix.platform }}" in
+            linux-x64) ARCH=amd64 ;;
+            linux-arm64) ARCH=arm64 ;;
+          *) echo "Unsupported Linux architecture"; exit 1 ;;
+          esac
+
+          mkdir -p pkg/DEBIAN pkg/usr/local/bin
+          echo "Package: $APP_NAME
+          Version: $VERSION
+          Section: utils
+          Priority: optional
+          Architecture: $ARCH
+          Maintainer: Alberto Amoruso <alberto@amoruso.dev>
+          Description: Debrid-Link CLI cross-platform client" > pkg/DEBIAN/control
+          cp dlcli pkg/usr/local/bin/
+          dpkg-deb --build pkg ${APP_NAME}_${ARCH}_${VERSION}.deb
+
+      - name: Upload Linux .deb
+        if: startsWith(matrix.platform, 'linux')
+        uses: actions/upload-artifact@v6
+        with:
+          name: dlcli-${{ matrix.platform }}
+          path: '*.deb'
+
+      - name: Upload Windows executable
+        if: startsWith(matrix.platform, 'win')
+        uses: actions/upload-artifact@v6
+        with:
+          name: dlcli-${{ matrix.platform }}
+          path: 'dlcli.exe'
+
+      - name: Upload macOS executable
+        if: startsWith(matrix.platform, 'osx')
+        uses: actions/upload-artifact@v6
+        with:
+          name: dlcli-${{ matrix.platform }}
+          path: 'dlcli'

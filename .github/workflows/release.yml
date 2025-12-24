@@ -1,0 +1,94 @@
+name: Release Debrid-Link CLI
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+         fetch-depth: 0
+
+      - name: Download Linux x64 artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dlcli-linux-x64
+          path: artifacts/linux-x64
+
+      - name: Download Linux ARM64 artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dlcli-linux-arm64
+          path: artifacts/linux-arm64
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dlcli-win-x64
+          path: artifacts/win-x64
+
+      - name: Download macOS x64 artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dlcli-osx-x64
+          path: artifacts/osx-x64
+
+      - name: Download macOS ARM64 artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dlcli-osx-arm64
+          path: artifacts/osx-arm64
+
+      - name: Rename all artifacts for release
+        run: |
+          # Linux
+            mv artifacts/linux-x64/*.deb artifacts/linux-x64/dlcli-linux-x64.deb
+            mv artifacts/linux-arm64/*.deb artifacts/linux-arm64/dlcli-linux-arm64.deb
+
+          # Windows
+            mv artifacts/win-x64/dlcli.exe artifacts/win-x64/dlcli-windows-x64.exe
+
+          # macOS
+            mv artifacts/osx-x64/dlcli artifacts/osx-x64/dlcli-macos-x64
+            mv artifacts/osx-arm64/dlcli artifacts/osx-arm64/dlcli-macos-arm64
+
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v3.4.0
+        with:
+          commitMode: "true"
+          configurationJson: |
+            {
+              "categories": [
+                {
+                    "title": "## 📦 Commits",
+                    "labels": []
+                }
+              ],
+              "template": "${{ '${{CHANGELOG}}' }}[`${{ '${{FROM_TAG}}' }}...${{ '${{TO_TAG}}' }}`](${{ '${{RELEASE_DIFF}}' }})",
+              "pr_template": "- ${{ '${{TITLE}}' }}\n"
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/linux-x64/*.deb
+            artifacts/linux-arm64/*.deb
+            artifacts/win-x64/*.exe
+            artifacts/osx-x64/*
+            artifacts/osx-arm64/*
+          body: ${{ steps.build_changelog.outputs.changelog }}

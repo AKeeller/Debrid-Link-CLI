@@ -17,6 +17,6 @@ AccountInfoView.Render(account);
 Console.WriteLine();
 
 var chosenTorrent = TorrentSelector.SelectFrom(torrents);
-await DownloadService.DownloadAllAsync(chosenTorrent.Files, "downloads");
+await DownloadService.DownloadAllAsync(chosenTorrent.Files, ".");
 
 return 0;

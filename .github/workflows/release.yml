@@ -26,6 +26,12 @@ jobs:
           name: dlcli-linux-x64
           path: artifacts/linux-x64
 
+      - name: Download Linux ARM artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dlcli-linux-arm
+          path: artifacts/linux-arm
+
       - name: Download Linux ARM64 artifact
         uses: actions/download-artifact@v7
         with:
@@ -54,6 +60,7 @@ jobs:
         run: |
           # Linux
             mv artifacts/linux-x64/*.deb artifacts/linux-x64/dlcli-linux-x64.deb
+            mv artifacts/linux-arm/*.deb artifacts/linux-arm/dlcli-linux-arm.deb
             mv artifacts/linux-arm64/*.deb artifacts/linux-arm64/dlcli-linux-arm64.deb
 
           # Windows
@@ -87,6 +94,7 @@ jobs:
         with:
           files: |
             artifacts/linux-x64/*.deb
+            artifacts/linux-arm/*.deb
             artifacts/linux-arm64/*.deb
             artifacts/win-x64/*.exe
             artifacts/osx-x64/*

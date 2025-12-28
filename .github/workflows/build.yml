@@ -36,13 +36,12 @@ jobs:
           echo "GitVersion SemVer: ${{ steps.gitversion.outputs.SemVer }}"
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore src
 
       - name: Publish executable
         run: |
-          mkdir -p publish
           echo "Publishing for ${{ matrix.platform }}..."
-          dotnet publish -c Release -r ${{ matrix.platform }} -p:PublishSingleFile=true --self-contained true -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:AssemblyName=dlcli -o .
+          dotnet publish src -c Release -r ${{ matrix.platform }} -p:PublishSingleFile=true --self-contained true -p:Version=${{ steps.gitversion.outputs.SemVer }} -p:AssemblyName=dlcli -o .
 
       - name: Package Linux .deb
         if: startsWith(matrix.platform, 'linux')

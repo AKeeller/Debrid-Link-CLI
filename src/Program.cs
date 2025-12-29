@@ -1,22 +1,16 @@
-﻿var apiKey = new SmartApiKeyProvider(
-	new ArgsApiKeyProvider(args),
+﻿using System.CommandLine;
+
+var apiKeyProvider = new SmartApiKeyProvider(
 	new EnvApiKeyProvider(),
-	new StdinApiKeyProvider(),
 	new ConfigApiKeyProvider()
-).GetApiKey();
+);
 
-if (apiKey is null)
-	return 1;
+var rootCommand = new RootCommand()
+{
+	Subcommands =
+	{
+		new TorrentCommand(apiKeyProvider)
+	}
+};
 
-using var client = new DebridLinkClient(apiKey);
-var account = await client.GetAccountAsync();
-var torrents = await client.GetTorrentsAsync();
-
-AccountInfoView.Render(account);
-
-Console.WriteLine();
-
-var chosenTorrent = TorrentSelector.SelectFrom(torrents);
-await DownloadService.DownloadAllAsync(chosenTorrent.Files, ".");
-
-return 0;
+return await rootCommand.Parse(args).InvokeAsync();

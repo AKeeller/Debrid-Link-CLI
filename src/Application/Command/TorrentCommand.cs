@@ -2,7 +2,7 @@ using System.CommandLine;
 
 public class TorrentCommand : Command
 {
-	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "Download files from a torrent managed by DebridLink") =>
+	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "List and download torrent files") =>
 		SetAction(async _ =>
 		{
 			var apiKey = apiKeyProvider.GetApiKey();

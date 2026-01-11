@@ -16,7 +16,19 @@ public class TorrentCommand : Command
 			var account = await client.GetAccountAsync();
 			var torrents = await client.GetTorrentsAsync();
 
+			if (account is null)
+			{
+				Console.WriteLine("Failed to retrieve account information");
+				return 1;
+			}
+
 			AccountInfoView.Render(account);
+
+			if (torrents is null || torrents.Count is 0)
+			{
+				Console.WriteLine("No torrents found");
+				return 1;
+			}
 
 			Console.WriteLine();
 

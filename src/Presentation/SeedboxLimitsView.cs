@@ -1,3 +1,4 @@
+using DebridLinkCLI.Presentation.Formatting;
 using Humanizer;
 using Spectre.Console;
 
@@ -18,7 +19,7 @@ public static class SeedboxLimitsView
 		var node = new TreeNode(new Markup("[yellow]Basic info[/]"));
 
 		node.AddNode($"Usage: {limits.UsagePercent.Current}%");
-		node.AddNode($"Next reset in: {FormatSeconds(limits.NextResetSeconds.Value)}");
+		node.AddNode($"Next reset in: {TimeFormatter.FormatSeconds(limits.NextResetSeconds.Value)}");
 
 		return node;
 	}
@@ -32,15 +33,5 @@ public static class SeedboxLimitsView
 		node.AddNode($"Month size: {limits.MonthSize.Current.Bytes().Humanize()} / {limits.MonthSize.Value.Bytes().Humanize()}");
 
 		return node;
-	}
-
-	private static string FormatSeconds(double seconds)
-	{
-		var timeSpan = TimeSpan.FromSeconds(seconds);
-
-		if (timeSpan < TimeSpan.Zero)
-			return "[red]Expired[/]";
-
-		return $"{timeSpan.Days}d {timeSpan.Hours}h {timeSpan.Minutes}m";
 	}
 }

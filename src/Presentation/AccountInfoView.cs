@@ -1,3 +1,4 @@
+using DebridLinkCLI.Presentation.Formatting;
 using Spectre.Console;
 
 public static class AccountInfoView
@@ -30,7 +31,7 @@ public static class AccountInfoView
 		node.AddNode($"Type: {a.AccountType}");
 
 		if (a.AccountType is AccountType.Premium)
-			node.AddNode($"Premium left: {FormatSeconds(a.PremiumLeft)}");
+			node.AddNode($"Premium left: {TimeFormatter.FormatSeconds(a.PremiumLeft)}");
 
 		node.AddNode($"Points: {a.Pts}");
 
@@ -38,14 +39,4 @@ public static class AccountInfoView
 	}
 
 	private static string FormatBool(bool value) => value ? "[green]Yes[/]" : "[red]No[/]";
-
-	private static string FormatSeconds(double seconds)
-	{
-		var timeSpan = TimeSpan.FromSeconds(seconds);
-
-		if (timeSpan < TimeSpan.Zero)
-			return "[red]Expired[/]";
-
-		return $"{timeSpan.Days}d {timeSpan.Hours}h {timeSpan.Minutes}m";
-	}
 }

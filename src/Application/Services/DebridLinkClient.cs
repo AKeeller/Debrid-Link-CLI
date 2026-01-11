@@ -7,6 +7,7 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 
 	public async Task<AccountInfo?> GetAccountAsync() => (await _http.GetFromJsonAsync<ApiResponse<AccountInfo>>("account/infos"))?.Value;
 	public async Task<List<Torrent>?> GetTorrentsAsync() => (await _http.GetFromJsonAsync<ApiResponse<List<Torrent>>>("seedbox/list"))?.Value;
+	public async Task<SeedboxLimits?> GetSeedboxLimitsAsync() => (await _http.GetFromJsonAsync<ApiResponse<SeedboxLimits>>("seedbox/limits"))?.Value;
 
 	public async Task<bool> AddTorrentAsync(string url)
 	{

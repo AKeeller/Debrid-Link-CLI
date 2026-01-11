@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Json;
 
 public sealed class DebridLinkClient(string apiKey) : IDisposable
 {
@@ -11,6 +12,17 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 	{
 		var response = await _http.GetFromJsonAsync<ApiResponse<T>>(url);
 		return response?.Value;
+	}
+
+	public async Task<bool> AddTorrentAsync(string url)
+	{
+		var payload = new { url };
+		var response = await _http.PostAsJsonAsync("seedbox/add", payload);
+
+		await using var stream = await response.Content.ReadAsStreamAsync();
+		using var doc = await JsonDocument.ParseAsync(stream);
+
+		return doc.RootElement.GetProperty("success").GetBoolean();
 	}
 
 	public void Dispose() => _http.Dispose();

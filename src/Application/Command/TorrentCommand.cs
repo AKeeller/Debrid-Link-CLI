@@ -2,7 +2,10 @@ using System.CommandLine;
 
 public class TorrentCommand : Command
 {
-	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "List and download torrent files") =>
+	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "List and download torrent files")
+	{
+		Subcommands.Add(new TorrentAddCommand(apiKeyProvider));
+
 		SetAction(async _ =>
 		{
 			var apiKey = apiKeyProvider.GetApiKey();
@@ -21,4 +24,5 @@ public class TorrentCommand : Command
 			await DownloadService.DownloadAllAsync(chosenTorrent.Files, ".");
 			return 0;
 		});
+	}
 }

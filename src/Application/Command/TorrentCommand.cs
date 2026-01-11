@@ -5,6 +5,7 @@ public class TorrentCommand : Command
 	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "List and download torrent files")
 	{
 		Subcommands.Add(new TorrentAddCommand(apiKeyProvider));
+		Subcommands.Add(new TorrentLimitsCommand(apiKeyProvider));
 
 		SetAction(async _ =>
 		{

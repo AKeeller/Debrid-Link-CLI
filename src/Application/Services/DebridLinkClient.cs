@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 
 public sealed class DebridLinkClient(string apiKey) : IDisposable
 {
-	private readonly HttpClient _http = HttpClient.CreateAuthenticatedHttpClient("https://debrid-link.com/api/v2", apiKey);
+	private readonly HttpClient _http = HttpClient.CreateAuthenticatedHttpClient("https://debrid-link.com/api/v2/", apiKey);
 
 	public async Task<AccountInfo> GetAccountAsync() => (await GetAsync<AccountInfo>("account/infos"))!;
 	public async Task<List<Torrent>> GetTorrentsAsync() => (await GetAsync<List<Torrent>>("seedbox/list"))!;

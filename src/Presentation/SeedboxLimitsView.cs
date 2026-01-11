@@ -1,3 +1,4 @@
+using Humanizer;
 using Spectre.Console;
 
 public static class SeedboxLimitsView
@@ -6,10 +7,20 @@ public static class SeedboxLimitsView
 	{
 		var root = new Tree("[yellow]Usage and limits[/]");
 
-		root.AddNode($"Usage: {seedboxLimits.UsagePercent.Current}%");
-		root.AddNode($"Next reset in: {FormatSeconds(seedboxLimits.NextResetSeconds.Value)}");
+		root.AddNode(BuildBasicInfo(seedboxLimits));
+		root.AddNode(BuildStatsNode(seedboxLimits));
 
 		AnsiConsole.Write(root);
+	}
+
+	private static TreeNode BuildBasicInfo(SeedboxLimits limits)
+	{
+		var node = new TreeNode(new Markup("[yellow]Basic info[/]"));
+
+		node.AddNode($"Usage: {limits.UsagePercent.Current}%");
+		node.AddNode($"Next reset in: {FormatSeconds(limits.NextResetSeconds.Value)}");
+
+		return node;
 	}
 
 	private static TreeNode BuildStatsNode(SeedboxLimits limits)

@@ -1,22 +1,20 @@
-using System.Text.Json.Serialization;
-
-public class AccountInfo
+public sealed class AccountInfo
 {
-	[JsonPropertyName("Pseudo")]
-	public string Username { get; set; } = string.Empty;
-	public string Email { get; set; } = string.Empty;
-	public bool EmailVerified { get; set; }
-	public int AccountType { get; set; }
-	public long PremiumLeft { get; set; }
-	public int Pts { get; set; }
-	public int TrafficShare { get; set; }
-	public string VouchersUrl { get; set; } = string.Empty;
-	public string EditPasswordUrl { get; set; } = string.Empty;
-	public string EditEmailUrl { get; set; } = string.Empty;
-	public string ViewSessidUrl { get; set; } = string.Empty;
-	public string UpgradeAccountUrl { get; set; } = string.Empty;
-	public string RegisterDate { get; set; } = string.Empty;
-	public bool ServerDetected { get; set; }
-	public AccountSettings Settings { get; set; } = new();
-	public string AvatarUrl { get; set; } = string.Empty;
+	public string Username { get; init; } = default!;
+	public string Email { get; init; } = default!;
+	public bool EmailVerified { get; init; }
+	public long PremiumLeft { get; init; }
+	public int Pts { get; init; }
+
+	public Uri UpgradeAccountUrl { get; init; } = default!;
+	public Uri VouchersUrl { get; init; } = default!;
+	public Uri EditPasswordUrl { get; init; } = default!;
+	public Uri EditEmailUrl { get; init; } = default!;
+	public Uri ViewSessidUrl { get; init; } = default!;
+
+	public AccountType AccountType { get; init; }
+	public DateOnly RegisterDate { get; init; }
+	public bool ServerDetected { get; init; }
+
+	public AccountSettings Settings { get; init; } = default!;
 }

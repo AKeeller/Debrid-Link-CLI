@@ -39,7 +39,7 @@ public static class AccountInfoView
 
 	private static string FormatBool(bool value) => value ? "[green]Yes[/]" : "[red]No[/]";
 
-	private static string FormatSeconds(long seconds)
+	private static string FormatSeconds(double seconds)
 	{
 		var timeSpan = TimeSpan.FromSeconds(seconds);
 

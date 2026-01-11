@@ -4,6 +4,8 @@ public class TorrentCommand : Command
 {
 	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "List and download torrent files")
 	{
+		Aliases.Add("seedbox");
+
 		Subcommands.Add(new TorrentAddCommand(apiKeyProvider));
 		Subcommands.Add(new TorrentLimitsCommand(apiKeyProvider));
 

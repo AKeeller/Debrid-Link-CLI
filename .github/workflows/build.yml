@@ -2,6 +2,8 @@ name: Build Debrid-Link CLI
 
 on:
   push:
+    branches:
+      - '**'
   workflow_call:
 
 jobs:

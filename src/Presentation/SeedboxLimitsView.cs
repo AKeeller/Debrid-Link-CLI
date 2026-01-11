@@ -27,6 +27,7 @@ public static class SeedboxLimitsView
 	{
 		var node = new TreeNode(new Markup("[yellow]Statistics[/]"));
 
+		node.AddNode($"Active transfers: {limits.ActiveTransferCount.Current} / {limits.ActiveTransferCount.Value}");
 		node.AddNode($"Month count: {limits.MonthCount.Current} / {limits.MonthCount.Value}");
 		node.AddNode($"Month size: {limits.MonthSize.Current.Bytes().Humanize()} / {limits.MonthSize.Value.Bytes().Humanize()}");
 

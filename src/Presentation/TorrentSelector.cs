@@ -7,7 +7,7 @@ public static class TorrentSelector
 	{
 		var prompt = new SelectionPrompt<Torrent>
 		{
-			Converter = t => $"{t.Name} ({t.TotalSize?.Bytes().Humanize() ?? "Unknown size"})"
+			Converter = t => $"{t.Name} ({t.TotalSize.Bytes().Humanize() ?? "Unknown size"})"
 		};
 
 		prompt.AddChoices(torrents);

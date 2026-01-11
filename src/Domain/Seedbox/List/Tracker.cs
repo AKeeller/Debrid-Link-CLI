@@ -1,4 +1,4 @@
-public class Tracker
+public sealed class Tracker
 {
-	public string? Announce { get; set; }
+	public string Announce { get; init; } = default!;
 }

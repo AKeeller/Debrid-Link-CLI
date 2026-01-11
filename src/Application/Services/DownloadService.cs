@@ -2,7 +2,7 @@ using Spectre.Console;
 
 public static class DownloadService
 {
-	private static async Task DownloadOneAsync(HttpClient http, FileItem file, string outputFolder, ProgressTask task, ProgressTask? globalTask = null)
+	private static async Task DownloadOneAsync(HttpClient http, TorrentFile file, string outputFolder, ProgressTask task, ProgressTask? globalTask = null)
 	{
 		var response = await http.GetAsync(file.DownloadUrl!, HttpCompletionOption.ResponseHeadersRead);
 		response.EnsureSuccessStatusCode();
@@ -49,7 +49,7 @@ public static class DownloadService
 			.StartAsync(async ctx =>
 			{
 				var tasks = files
-					.Where(file => !string.IsNullOrWhiteSpace(file.DownloadUrl))
+					.Where(file => !string.IsNullOrWhiteSpace(file.DownloadUrl.AbsoluteUri))
 					.Select(file =>
 					{
 						var task = ctx.AddTask(file.Name, maxValue: file.Size);

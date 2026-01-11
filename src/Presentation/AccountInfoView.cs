@@ -27,6 +27,7 @@ public static class AccountInfoView
 	{
 		var node = new TreeNode(new Markup("[yellow]Account[/]"));
 
+		node.AddNode($"Type: {a.AccountType}");
 		node.AddNode($"Premium left: {FormatSeconds(a.PremiumLeft)}");
 		node.AddNode($"Points: {a.Pts}");
 

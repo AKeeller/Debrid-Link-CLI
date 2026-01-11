@@ -29,7 +29,7 @@ public static class DownloadService
 		}
 	}
 
-	public static async Task DownloadAllAsync(List<FileItem> files, string outputFolder)
+	public static async Task DownloadAllAsync(IEnumerable<TorrentFile> files, string outputFolder)
 	{
 		using var http = new HttpClient();
 

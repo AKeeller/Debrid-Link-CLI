@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using System.Text.Json;
 
 public sealed class DebridLinkClient(string apiKey) : IDisposable
 {
@@ -14,10 +13,9 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 		var payload = new { url };
 		var response = await _http.PostAsJsonAsync("seedbox/add", payload);
 
-		await using var stream = await response.Content.ReadAsStreamAsync();
-		using var doc = await JsonDocument.ParseAsync(stream);
+		var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
 
-		return doc.RootElement.GetProperty("success").GetBoolean();
+		return result?.Success ?? false;
 	}
 
 	public async Task<bool> AddTorrentAsync(FileInfo torrentFile)
@@ -32,20 +30,18 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 
 		var response = await _http.PostAsync("seedbox/add", content);
 
-		await using var responseStream = await response.Content.ReadAsStreamAsync();
-		using var doc = await JsonDocument.ParseAsync(responseStream);
+		var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
 
-		return doc.RootElement.GetProperty("success").GetBoolean();
+		return result?.Success ?? false;
 	}
 
 	public async Task<bool> RemoveTorrentAsync(Torrent torrent)
 	{
 		var response = await _http.DeleteAsync($"seedbox/{torrent.Id}/remove");
 
-		await using var stream = await response.Content.ReadAsStreamAsync();
-		using var doc = await JsonDocument.ParseAsync(stream);
+		var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
 
-		return doc.RootElement.GetProperty("success").GetBoolean();
+		return result?.Success ?? false;
 	}
 
 	public void Dispose() => _http.Dispose();

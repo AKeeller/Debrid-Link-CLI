@@ -34,15 +34,15 @@ public class TorrentAddCommand : Command
 
 			if (torrentLink is not null)
 			{
-				var result = await client.AddTorrentAsync(torrentLink);
-				Console.WriteLine($"Torrent was {(result ? "successfully" : "not")} added.");
+				var success = await client.AddTorrentAsync(torrentLink);
+				Console.WriteLine($"Torrent was {(success ? "successfully" : "not")} added.");
 				return 0;
 			}
 
 			if (torrentFile is not null)
 			{
-				var result = await client.AddTorrentAsync(torrentFile);
-				Console.WriteLine($"Torrent was {(result ? "successfully" : "not")} added.");
+				var success = await client.AddTorrentAsync(torrentFile);
+				Console.WriteLine($"Torrent was {(success ? "successfully" : "not")} added.");
 				return 0;
 			}
 

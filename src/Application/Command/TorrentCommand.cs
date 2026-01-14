@@ -16,17 +16,7 @@ public class TorrentCommand : Command
 				return 1;
 
 			using var client = new DebridLinkClient(apiKey);
-			var account = await client.GetAccountAsync();
 			var torrents = await client.GetTorrentsAsync();
-
-			if (account is null)
-			{
-				Console.WriteLine("Failed to retrieve account information");
-				return 1;
-			}
-
-			AccountInfoView.Render(account);
-			Console.WriteLine();
 
 			while (true)
 			{

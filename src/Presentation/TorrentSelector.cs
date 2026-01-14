@@ -3,14 +3,10 @@ using Spectre.Console;
 
 public static class TorrentSelector
 {
-	public static Torrent SelectFrom(IEnumerable<Torrent> torrents)
-	{
-		var prompt = new SelectionPrompt<Torrent>
-		{
-			Converter = t => $"{t.Name} ({t.TotalSize.Bytes().Humanize() ?? "Unknown size"})"
-		};
-
-		prompt.AddChoices(torrents);
-		return AnsiConsole.Prompt(prompt);
-	}
+	public static Torrent SelectFrom(IEnumerable<Torrent> torrents) =>
+		AnsiConsole.Prompt(
+			new SelectionPrompt<Torrent>()
+			.AddChoices(torrents)
+			.UseConverter(torrent => $"{torrent.Name} ({torrent.TotalSize.Bytes().Humanize() ?? "Unknown size"})")
+		);
 }

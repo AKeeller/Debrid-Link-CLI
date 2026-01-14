@@ -10,7 +10,8 @@ var rootCommand = new RootCommand()
 	Subcommands =
 	{
 		new AccountCommand(apiKeyProvider),
-		new TorrentCommand(apiKeyProvider)
+		new TorrentCommand(apiKeyProvider),
+		new DownloaderCommand(apiKeyProvider)
 	}
 };
 

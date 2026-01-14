@@ -46,5 +46,15 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 
 	public async Task<List<DownloaderFile>?> GetDownloaderFilesAsync() => (await _http.GetFromJsonAsync<ApiResponse<List<DownloaderFile>>>("downloader/list"))?.Value;
 
+	public async Task<bool> RemoveDownloaderFilesAsync(params IEnumerable<DownloaderFile> downloaderFiles)
+	{
+		var idsCsv = string.Join(",", downloaderFiles.Select(f => f.Id));
+		var response = await _http.DeleteAsync($"downloader/{idsCsv}/remove");
+
+		var result = await response.Content.ReadFromJsonAsync<ApiResponse<object>>();
+
+		return result?.Success ?? false;
+	}
+
 	public void Dispose() => _http.Dispose();
 }

@@ -26,17 +26,33 @@ public class TorrentCommand : Command
 			}
 
 			AccountInfoView.Render(account);
-
-			if (torrents is null || torrents.Count is 0)
-			{
-				Console.WriteLine("No torrents found");
-				return 1;
-			}
-
 			Console.WriteLine();
 
-			var chosenTorrent = TorrentSelector.SelectFrom(torrents);
-			await DownloadService.DownloadAllAsync(chosenTorrent.Files, ".");
+			while (true)
+			{
+				if (torrents is null || torrents.Count is 0)
+				{
+					Console.WriteLine("No torrents found");
+					return 1;
+				}
+
+				var chosenTorrent = TorrentSelector.SelectFrom(torrents);
+				var action = TorrentActionSelector.SelectAction(chosenTorrent);
+
+				if (action == TorrentAction.Delete)
+				{
+					var success = await client.RemoveTorrentAsync(chosenTorrent);
+					if (success)
+						torrents.Remove(chosenTorrent);
+				}
+
+				if (action == TorrentAction.Download)
+				{
+					await DownloadService.DownloadAllAsync(chosenTorrent.Files, ".");
+					break;
+				}
+			}
+
 			return 0;
 		});
 	}

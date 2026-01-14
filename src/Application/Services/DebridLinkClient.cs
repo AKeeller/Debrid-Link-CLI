@@ -38,5 +38,15 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 		return doc.RootElement.GetProperty("success").GetBoolean();
 	}
 
+	public async Task<bool> RemoveTorrentAsync(Torrent torrent)
+	{
+		var response = await _http.DeleteAsync($"seedbox/{torrent.Id}/remove");
+
+		await using var stream = await response.Content.ReadAsStreamAsync();
+		using var doc = await JsonDocument.ParseAsync(stream);
+
+		return doc.RootElement.GetProperty("success").GetBoolean();
+	}
+
 	public void Dispose() => _http.Dispose();
 }

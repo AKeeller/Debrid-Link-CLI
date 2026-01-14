@@ -1,4 +1,4 @@
-public enum TorrentAction
+public enum FileAction
 {
 	Download,
 	Delete,

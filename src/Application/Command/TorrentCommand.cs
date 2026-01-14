@@ -29,14 +29,14 @@ public class TorrentCommand : Command
 				var chosenTorrent = TorrentSelector.SelectFrom(torrents);
 				var action = TorrentActionSelector.SelectAction(chosenTorrent);
 
-				if (action == TorrentAction.Delete)
+				if (action == FileAction.Delete)
 				{
 					var success = await client.RemoveTorrentAsync(chosenTorrent);
 					if (success)
 						torrents.Remove(chosenTorrent);
 				}
 
-				if (action == TorrentAction.Download)
+				if (action == FileAction.Download)
 				{
 					await DownloadService.DownloadAllAsync(chosenTorrent.Files, ".");
 					break;

@@ -13,14 +13,30 @@ public class DownloaderCommand : Command
 			using var client = new DebridLinkClient(apiKey);
 			var downloaderFiles = await client.GetDownloaderFilesAsync();
 
-			if (downloaderFiles is null || downloaderFiles.Count is 0)
+			while (true)
 			{
-				Console.WriteLine("No downloader links found");
-				return 1;
-			}
+				if (downloaderFiles is null || downloaderFiles.Count is 0)
+				{
+					Console.WriteLine("No downloader links found");
+					return 1;
+				}
 
-			var chosenDownloaderFiles = DownloaderSelector.SelectFrom(downloaderFiles);
-			await DownloadService.DownloadAllAsync(chosenDownloaderFiles, ".");
+				var chosenDownloaderFiles = DownloaderSelector.SelectFrom(downloaderFiles);
+				var action = DownloaderActionSelector.SelectAction(chosenDownloaderFiles);
+
+				if(action == FileAction.Delete)
+				{
+					var success = await client.RemoveDownloaderFilesAsync(chosenDownloaderFiles);
+					if (success)
+						downloaderFiles.RemoveAll(file => chosenDownloaderFiles.Any(file2 => ReferenceEquals(file, file2)));
+				}
+
+				if (action == FileAction.Download)
+				{
+					await DownloadService.DownloadAllAsync(chosenDownloaderFiles, ".");
+					break;
+				}
+			}
 
 			return 0;
 		});

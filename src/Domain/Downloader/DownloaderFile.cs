@@ -1,4 +1,4 @@
-public class DownloaderFile
+public class DownloaderFile : IDownloadableFile
 {
 	public long Created { get; set; }
 	public required string Id { get; set; }

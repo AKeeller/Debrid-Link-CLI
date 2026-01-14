@@ -1,4 +1,4 @@
-public sealed class TorrentFile
+public sealed class TorrentFile : IDownloadableFile
 {
 	public string Id { get; init; } = default!;
 	public string Name { get; init; } = default!;

@@ -44,5 +44,7 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 		return result?.Success ?? false;
 	}
 
+	public async Task<List<DownloaderFile>?> GetDownloaderFilesAsync() => (await _http.GetFromJsonAsync<ApiResponse<List<DownloaderFile>>>("downloader/list"))?.Value;
+
 	public void Dispose() => _http.Dispose();
 }

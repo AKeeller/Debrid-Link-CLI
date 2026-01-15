@@ -6,6 +6,7 @@ public static class DownloaderSelector
 	public static List<DownloaderFile> SelectFrom(IEnumerable<DownloaderFile> downloaderFiles) =>
 		AnsiConsole.Prompt(
 			new MultiSelectionPrompt<DownloaderFile>()
+			.Title("Select one or more files:")
 			.AddChoices(downloaderFiles)
 			.UseConverter(downloader => Markup.Escape($"{downloader.Name} ({downloader.Size.Bytes().Humanize() ?? "Unknown size"})"))
 		);

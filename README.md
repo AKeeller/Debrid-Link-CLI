@@ -176,6 +176,11 @@ dlcli
 - `0` — Success
 - `1` — Error (missing API key, API failure, invalid input, etc.)
 
+## Contributing
+
+Issues and pull requests are welcome.  
+Please keep changes focused and consistent with the existing style.
+
 ## Disclaimer
 
 > **Disclaimer / Non-affiliation**

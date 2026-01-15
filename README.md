@@ -48,16 +48,32 @@ Displays user info, account type, points, and premium status
 dlcli account
 ```
 
+### `downloader`
+
+List downloader links and interactively download files.
+
+#### Description
+
+- List downloader links
+- Allows interactive multi-selection
+- Download or delete more files at once
+
+#### Usage
+
+```sh
+dlcli downloader
+```
+
 ### `torrent` (alias: `seedbox`)
 
 List torrents and interactively download files from your seedbox.
 
 #### Description
 
-- Retrieves account information
 - Lists active torrents
 - Allows interactive selection
 - Downloads all files from the selected torrent
+- Delete torrents
 
 #### Usage
 
@@ -69,6 +85,29 @@ or
 
 ```sh
 dlcli seedbox
+```
+
+## Downloader Subcommands
+
+### `downloader limits` (alias: `usage`)
+
+Show downloader usage and limits.
+
+#### Description
+
+- Displays current usage percentages
+- Shows reset timers and quota limits
+
+#### Usage
+
+```sh
+dlcli downloader limits
+```
+
+or
+
+```sh
+dlcli downloader usage
 ```
 
 ## Torrent Subcommands
@@ -125,6 +164,8 @@ dlcli torrent usage
 ```text
 dlcli
 ├── account
+├── downloader
+│   └── limits (alias: usage)
 └── torrent (alias: seedbox)
     ├── add
     └── limits (alias: usage)

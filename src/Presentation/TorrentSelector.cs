@@ -7,6 +7,6 @@ public static class TorrentSelector
 		AnsiConsole.Prompt(
 			new SelectionPrompt<Torrent>()
 			.AddChoices(torrents)
-			.UseConverter(torrent => $"{torrent.Name} ({torrent.TotalSize.Bytes().Humanize() ?? "Unknown size"})")
+			.UseConverter(torrent => Markup.Escape($"{torrent.Name} ({torrent.TotalSize.Bytes().Humanize() ?? "Unknown size"})"))
 		);
 }

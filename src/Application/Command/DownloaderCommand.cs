@@ -4,6 +4,8 @@ public class DownloaderCommand : Command
 {
 	public DownloaderCommand(IApiKeyProvider apiKeyProvider) : base("downloader", "List and download files from downloader links")
 	{
+		Subcommands.Add(new DownloaderLimitsCommand(apiKeyProvider));
+
 		SetAction(async _ =>
 		{
 			var apiKey = apiKeyProvider.GetApiKey();
@@ -24,7 +26,7 @@ public class DownloaderCommand : Command
 				var chosenDownloaderFiles = DownloaderSelector.SelectFrom(downloaderFiles);
 				var action = DownloaderActionSelector.SelectAction(chosenDownloaderFiles);
 
-				if(action == FileAction.Delete)
+				if (action == FileAction.Delete)
 				{
 					var success = await client.RemoveDownloaderFilesAsync(chosenDownloaderFiles);
 					if (success)

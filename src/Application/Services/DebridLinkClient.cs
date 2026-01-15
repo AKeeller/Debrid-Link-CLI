@@ -5,8 +5,23 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 	private readonly HttpClient _http = HttpClient.CreateAuthenticatedHttpClient("https://debrid-link.com/api/v2/", apiKey);
 
 	public async Task<AccountInfo?> GetAccountAsync() => (await _http.GetFromJsonAsync<ApiResponse<AccountInfo>>("account/infos"))?.Value;
-	public async Task<List<Torrent>?> GetTorrentsAsync() => (await _http.GetFromJsonAsync<ApiResponse<List<Torrent>>>("seedbox/list"))?.Value;
 	public async Task<SeedboxLimits?> GetSeedboxLimitsAsync() => (await _http.GetFromJsonAsync<ApiResponse<SeedboxLimits>>("seedbox/limits"))?.Value;
+
+	public async IAsyncEnumerable<Torrent> GetTorrentsAsync()
+	{
+		for (int page = 0; page != -1;)
+		{
+			var response = await _http.GetFromJsonAsync<ApiResponse<List<Torrent>>>($"seedbox/list?page={page}&perPage=100");
+
+			if (response?.Value is null)
+				yield break;
+
+			foreach (var torrent in response.Value)
+				yield return torrent;
+
+			page = response.Pagination?.Next ?? -1;
+		}
+	}
 
 	public async Task<bool> AddTorrentAsync(string url)
 	{

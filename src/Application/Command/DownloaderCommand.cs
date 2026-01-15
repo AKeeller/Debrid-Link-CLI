@@ -11,7 +11,7 @@ public class DownloaderCommand : Command
 				return 1;
 
 			using var client = new DebridLinkClient(apiKey);
-			var downloaderFiles = await client.GetDownloaderFilesAsync();
+			var downloaderFiles = await client.GetDownloaderFilesAsync().ToListAsync();
 
 			while (true)
 			{

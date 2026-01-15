@@ -44,7 +44,21 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 		return result?.Success ?? false;
 	}
 
-	public async Task<List<DownloaderFile>?> GetDownloaderFilesAsync() => (await _http.GetFromJsonAsync<ApiResponse<List<DownloaderFile>>>("downloader/list"))?.Value;
+	public async IAsyncEnumerable<DownloaderFile> GetDownloaderFilesAsync()
+	{
+		for (int page = 0; page != -1;)
+		{
+			var response = await _http.GetFromJsonAsync<ApiResponse<List<DownloaderFile>>>($"downloader/list?page={page}&perPage=100");
+
+			if (response?.Value is null)
+				yield break;
+
+			foreach (var file in response.Value)
+				yield return file;
+
+			page = response.Pagination?.Next ?? -1;
+		}
+	}
 
 	public async Task<bool> RemoveDownloaderFilesAsync(params IEnumerable<DownloaderFile> downloaderFiles)
 	{

@@ -85,5 +85,7 @@ public sealed class DebridLinkClient(string apiKey) : IDisposable
 		return result?.Success ?? false;
 	}
 
+	public async Task<GlobalHostersUsage?> GetHostersUsageAsync() => (await _http.GetFromJsonAsync<ApiResponse<GlobalHostersUsage>>("downloader/limits"))?.Value;
+
 	public void Dispose() => _http.Dispose();
 }

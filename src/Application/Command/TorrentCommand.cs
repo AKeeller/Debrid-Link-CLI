@@ -16,7 +16,7 @@ public class TorrentCommand : Command
 				return 1;
 
 			using var client = new DebridLinkClient(apiKey);
-			var torrents = await client.GetTorrentsAsync();
+			var torrents = await client.GetTorrentsAsync().ToListAsync();
 
 			while (true)
 			{

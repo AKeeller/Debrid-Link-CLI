@@ -7,6 +7,6 @@ public static class DownloaderSelector
 		AnsiConsole.Prompt(
 			new MultiSelectionPrompt<DownloaderFile>()
 			.AddChoices(downloaderFiles)
-			.UseConverter(downloader => $"{downloader.Name} ({downloader.Size.Bytes().Humanize() ?? "Unknown size"})")
+			.UseConverter(downloader => Markup.Escape($"{downloader.Name} ({downloader.Size.Bytes().Humanize() ?? "Unknown size"})"))
 		);
 }

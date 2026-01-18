@@ -1,6 +1,6 @@
 using System.CommandLine;
 
-public class TorrentAddCommand : Command
+public class TorrentAddCommand : ApiCommand
 {
 	private Option<FileInfo> _torrentLinksFromFileOption = new("--links-from-file")
 	{
@@ -23,20 +23,14 @@ public class TorrentAddCommand : Command
 		Required = false
 	};
 
-	public TorrentAddCommand(IApiKeyProvider apiKeyProvider) : base("add", "Add a torrent to DebridLink")
+	public TorrentAddCommand(IApiKeyProvider apiKeyProvider) : base("add", "Add a torrent to DebridLink", apiKeyProvider)
 	{
 		Options.Add(_torrentLinksFromFileOption);
 		Options.Add(_torrentLinkOption);
 		Options.Add(_torrentFileOption);
 
-		SetAction(async parseResult =>
+		SetActionWithClient(async (parseResult, client) =>
 		{
-			var apiKey = apiKeyProvider.GetApiKey();
-			if (apiKey is null)
-				return 1;
-
-			using var client = new DebridLinkClient(apiKey);
-
 			var torrentLinksFile = parseResult.GetValue(_torrentLinksFromFileOption);
 			var torrentLink = parseResult.GetValue(_torrentLinkOption);
 			var torrentFile = parseResult.GetValue(_torrentFileOption);

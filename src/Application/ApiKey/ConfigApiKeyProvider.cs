@@ -27,4 +27,14 @@ public class ConfigApiKeyProvider : IApiKeyProvider
 	public string UsageHint =>
 		$"[yellow]Config file:[/] Create [yellow]{ConfigPath}[/]\n" +
 		"Example content:\n[green]{\n    \"ApiKey\": \"your_api_key_here\"\n}[/]";
+
+	public void WriteApiKeyToConfig(string apiKey)
+	{
+		var configDir = Path.GetDirectoryName(ConfigPath);
+		Directory.CreateDirectory(configDir!);
+
+		var config = new Config { ApiKey = apiKey };
+		var json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
+		File.WriteAllText(ConfigPath, json);
+	}
 }

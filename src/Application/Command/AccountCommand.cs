@@ -1,15 +1,8 @@
-using System.CommandLine;
-
-public class AccountCommand : Command
+public class AccountCommand : ApiCommand
 {
-	public AccountCommand(IApiKeyProvider apiKeyProvider) : base("account", "Display DebridLink account information") =>
-		SetAction(async _ =>
+	public AccountCommand(IApiKeyProvider apiKeyProvider) : base("account", "Display DebridLink account information", apiKeyProvider) =>
+		SetActionWithClient(async client =>
 		{
-			var apiKey = apiKeyProvider.GetApiKey();
-			if (apiKey is null)
-				return 1;
-
-			using var client = new DebridLinkClient(apiKey);
 			var account = await client.GetAccountAsync();
 
 			if (account is null)

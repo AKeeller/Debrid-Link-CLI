@@ -16,4 +16,6 @@ public abstract class ApiCommand : Command
 			using var client = new DebridLinkClient(apiKey);
 			return await action(parseResult, client);
 		});
+
+	protected void SetActionWithClient(Func<DebridLinkClient, Task<int>> action) => SetActionWithClient((_, client) => action(client));
 }

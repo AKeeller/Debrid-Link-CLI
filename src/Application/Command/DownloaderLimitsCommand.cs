@@ -1,18 +1,11 @@
-using System.CommandLine;
-
-public class DownloaderLimitsCommand : Command
+public class DownloaderLimitsCommand : ApiCommand
 {
-	public DownloaderLimitsCommand(IApiKeyProvider apiKeyProvider) : base("limits", "Show downloader limits and usage")
+	public DownloaderLimitsCommand(IApiKeyProvider apiKeyProvider) : base("limits", "Show downloader limits and usage", apiKeyProvider)
 	{
 		Aliases.Add("usage");
 
-		SetAction(async _ =>
+		SetActionWithClient(async client =>
 		{
-			var apiKey = apiKeyProvider.GetApiKey();
-			if (apiKey is null)
-				return 1;
-
-			using var client = new DebridLinkClient(apiKey);
 			var limits = await client.GetHostersUsageAsync();
 			if (limits is null)
 			{

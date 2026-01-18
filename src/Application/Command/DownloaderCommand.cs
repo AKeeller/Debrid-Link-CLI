@@ -1,18 +1,11 @@
-using System.CommandLine;
-
-public class DownloaderCommand : Command
+public class DownloaderCommand : ApiCommand
 {
-	public DownloaderCommand(IApiKeyProvider apiKeyProvider) : base("downloader", "List and download files from downloader links")
+	public DownloaderCommand(IApiKeyProvider apiKeyProvider) : base("downloader", "List and download files from downloader links", apiKeyProvider)
 	{
 		Subcommands.Add(new DownloaderLimitsCommand(apiKeyProvider));
 
-		SetAction(async _ =>
+		SetActionWithClient(async client =>
 		{
-			var apiKey = apiKeyProvider.GetApiKey();
-			if (apiKey is null)
-				return 1;
-
-			using var client = new DebridLinkClient(apiKey);
 			var downloaderFiles = await client.GetDownloaderFilesAsync().ToListAsync();
 
 			while (true)

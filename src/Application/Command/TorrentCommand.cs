@@ -1,21 +1,14 @@
-using System.CommandLine;
-
-public class TorrentCommand : Command
+public class TorrentCommand : ApiCommand
 {
-	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "List and download torrent files")
+	public TorrentCommand(IApiKeyProvider apiKeyProvider) : base("torrent", "List and download torrent files", apiKeyProvider)
 	{
 		Aliases.Add("seedbox");
 
 		Subcommands.Add(new TorrentAddCommand(apiKeyProvider));
 		Subcommands.Add(new TorrentLimitsCommand(apiKeyProvider));
 
-		SetAction(async _ =>
+		SetActionWithClient(async client =>
 		{
-			var apiKey = apiKeyProvider.GetApiKey();
-			if (apiKey is null)
-				return 1;
-
-			using var client = new DebridLinkClient(apiKey);
 			var torrents = await client.GetTorrentsAsync().ToListAsync();
 
 			while (true)

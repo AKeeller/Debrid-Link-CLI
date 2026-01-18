@@ -1,18 +1,11 @@
-using System.CommandLine;
-
-public class TorrentLimitsCommand : Command
+public class TorrentLimitsCommand : ApiCommand
 {
-	public TorrentLimitsCommand(IApiKeyProvider apiKeyProvider) : base("limits", "Show seedbox usage and limits")
+	public TorrentLimitsCommand(IApiKeyProvider apiKeyProvider) : base("limits", "Show seedbox usage and limits", apiKeyProvider)
 	{
 		Aliases.Add("usage");
 
-		SetAction(async _ =>
+		SetActionWithClient(async client =>
 		{
-			var apiKey = apiKeyProvider.GetApiKey();
-			if (apiKey is null)
-				return 1;
-
-			using var client = new DebridLinkClient(apiKey);
 			var limits = await client.GetSeedboxLimitsAsync();
 
 			if (limits is null)

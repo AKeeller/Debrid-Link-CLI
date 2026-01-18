@@ -18,6 +18,21 @@ public class SmartApiKeyProvider(params IApiKeyProvider[] providers) : IApiKeyPr
 			Header = new PanelHeader("Debrid-Link CLI", Justify.Center)
 		};
 		AnsiConsole.Write(panel);
+
+		// No API Key found, prompt user to enter one and save it using the ConfigApiKeyProvider
+		var configProvider = new ConfigApiKeyProvider();
+		try
+		{
+			var apiKey = ApiKeyPrompt.Ask();
+			configProvider.WriteApiKeyToConfig(apiKey);
+			AnsiConsole.MarkupLineInterpolated($":check_mark_button: [green]API Key saved to:[/] {configProvider.ConfigPath}");
+			return apiKey;
+		}
+		catch (OperationCanceledException) { }
+		catch (Exception ex)
+		{
+			AnsiConsole.MarkupLineInterpolated($"[red]Failed to save API Key:[/] {ex.Message}");
+		}
 		return null;
 	}
 

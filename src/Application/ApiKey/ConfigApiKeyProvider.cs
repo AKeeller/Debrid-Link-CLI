@@ -18,9 +18,8 @@ public class ConfigApiKeyProvider : IApiKeyProvider
 
 		try
 		{
-			var anonType = new { ApiKey = "" };
-			var config = JsonSerializer.Deserialize(File.ReadAllText(_configPath), anonType.GetType());
-			return ((dynamic?)config)?.ApiKey;
+			var config = JsonSerializer.Deserialize<Config>(File.ReadAllText(_configPath));
+			return config?.ApiKey;
 		}
 		catch (JsonException)
 		{

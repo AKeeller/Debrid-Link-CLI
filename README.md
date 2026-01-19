@@ -3,6 +3,8 @@
 ![Static Badge](https://img.shields.io/badge/AKeeller-Debrid--Link%20CLI-blue)
 [![Build Debrid-Link CLI](https://github.com/AKeeller/Debrid-Link-CLI/actions/workflows/build.yml/badge.svg)](https://github.com/AKeeller/Debrid-Link-CLI/actions/workflows/build.yml)
 
+![dlcli torrent](https://github.com/user-attachments/assets/a4b94901-837d-40fe-94e3-af822be096b8)
+
 A cross-platform command-line client for [Debrid-Link](https://debrid-link.com), enabling torrent management, account inspection, and file downloads with rich progress visualization.
 
 ## Features

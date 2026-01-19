@@ -32,102 +32,40 @@ The CLI automatically tries the following sources **in order**:
 
 If no API key is found, the CLI will display instructions.
 
-## Root Commands
+## Commands
 
-### `account`
+| Command      | Alias     | Action                       |
+|--------------|-----------|------------------------------|
+| `account`    | —         | Show account info            |
+| `downloader` | —         | List/manage downloader links |
+| `torrent`    | `seedbox` | List/manage torrents         |
 
-Display Debrid-Link account information.
+## `downloader` Subcommands
 
-#### Description
+| Command             | Alias   | Action                     |
+|---------------------|---------|----------------------------|
+| `limits`            | `usage` | Show usage, quotas, resets |
 
-Displays user info, account type, points, and premium status
+## `torrent` Subcommands
 
-#### Usage
+| Command          | Alias   | Action                               | Options            |
+|------------------|---------|--------------------------------------|--------------------|
+| `add`            | —       | Add torrent via magnet or `.torrent` | `--link`, `--file` |
+| `limits`         | `usage` | Show usage, active transfers, stats  | —                  |
+
+## Examples
 
 ```sh
 dlcli account
 ```
 
-### `downloader`
-
-List downloader links and interactively download files.
-
-#### Description
-
-- List downloader links
-- Allows interactive multi-selection
-- Download or delete more files at once
-
-#### Usage
-
 ```sh
 dlcli downloader
 ```
 
-### `torrent` (alias: `seedbox`)
-
-List torrents and interactively download files from your seedbox.
-
-#### Description
-
-- Lists active torrents
-- Allows interactive selection
-- Downloads all files from the selected torrent
-- Delete torrents
-
-#### Usage
-
-```sh
-dlcli torrent
-```
-
-or
-
-```sh
-dlcli seedbox
-```
-
-## Downloader Subcommands
-
-### `downloader limits` (alias: `usage`)
-
-Show downloader usage and limits.
-
-#### Description
-
-- Displays current usage percentages
-- Shows reset timers and quota limits
-
-#### Usage
-
 ```sh
 dlcli downloader limits
 ```
-
-or
-
-```sh
-dlcli downloader usage
-```
-
-## Torrent Subcommands
-
-### `torrent add`
-
-Add a torrent to Debrid-Link.
-
-#### Description
-
-Accepts either a magnet / URL or a local `.torrent` file
-
-#### Options
-
-| Option   | Alias | Description                |
-|----------|-------|----------------------------|
-| `--link` | `-l`  | Magnet link or torrent URL |
-| `--file` | `-f`  | Path to a `.torrent` file  |
-
-#### Examples
 
 ```sh
 dlcli torrent add --link magnet:?xt=urn:btih:...
@@ -137,26 +75,8 @@ dlcli torrent add --link magnet:?xt=urn:btih:...
 dlcli torrent add --file ./example.torrent
 ```
 
-### `torrent limits` (alias: `usage`)
-
-Show seedbox usage and limits.
-
-#### Description
-
-- Displays current usage percentages
-- Shows reset timers and quota limits
-- Includes active transfers and monthly statistics
-
-#### Usage
-
 ```sh
 dlcli torrent limits
-```
-
-or
-
-```sh
-dlcli torrent usage
 ```
 
 ## TL;DR

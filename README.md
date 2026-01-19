@@ -48,10 +48,10 @@ If no API key is found, the CLI will display instructions.
 
 ## `torrent` Subcommands
 
-| Command          | Alias   | Action                               | Options            |
-|------------------|---------|--------------------------------------|--------------------|
-| `add`            | —       | Add torrent via magnet or `.torrent` | `--link`, `--file` |
-| `limits`         | `usage` | Show usage, active transfers, stats  | —                  |
+| Command          | Alias   | Action                               | Options                                 |
+|------------------|---------|--------------------------------------|-----------------------------------------|
+| `add`            | —       | Add torrent via magnet or `.torrent` | `--link`, `--file`, `--links-from-file` |
+| `limits`         | `usage` | Show usage, active transfers, stats  | —                                       |
 
 ## Examples
 
@@ -73,6 +73,10 @@ dlcli torrent add --link magnet:?xt=urn:btih:...
 
 ```sh
 dlcli torrent add --file ./example.torrent
+```
+
+```sh
+dlcli torrent add --links-from-file list.txt
 ```
 
 ```sh
